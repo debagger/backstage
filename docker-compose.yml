@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  backend:
+    build: 
+      context: ./backend
+    image: node
+    volumes:
+      - ./backend:/home/backend
+    working_dir: /home/backend
+    expose: 
+      - "3000"
+    ports:
+      - 8080:3000
+    entrypoint: npm run start:dev
+  frontend:
+    build: 
+      context: ./frontend
+    image: node
+    volumes: 
+      - ./frontend:/home/frontend
+    working_dir: /home/frontend
+    expose: 
+      - "3000"
+    ports:
+      - 3000:3000
+    entrypoint: npm run dev
+

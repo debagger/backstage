@@ -9,8 +9,6 @@ services:
     working_dir: /home/backend
     expose: 
       - "3000"
-    ports:
-      - 8080:3000
     entrypoint: npm run start:dev
   frontend:
     build: 
@@ -21,7 +19,54 @@ services:
     working_dir: /home/frontend
     expose: 
       - "3000"
-    ports:
-      - 3000:3000
     entrypoint: npm run dev
-
+  nginx:
+    build: ./nginx
+    ports: 
+      - 80:80
+  db:
+    image: postgres
+    restart: always
+    expose: 
+    - "5432"
+    environment:
+      POSTGRES_PASSWORD: password
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  pgweb:
+    container_name: pgweb
+    restart: always
+    image: sosedoff/pgweb
+    ports: 
+      - "8081:8081"
+  zipkin:
+    image: openzipkin/zipkin
+    ports: 
+      - 9411:9411
+    environment: 
+      STORAGE_TYPE: elasticsearch
+      ES_HOSTS: http://elasticsearch:9200
+  # cassandra:
+  #   container_name: backstage_cassandra
+  #   image: cassandra
+  #   expose: 
+  #     - "9042"
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 800M
+  elasticsearch:
+    image: elasticsearch:7.10.1
+    expose: 
+      - "9200"
+      - "9300"
+    environment: 
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms250m -Xmx250m"
+    deploy:
+      resources:
+        limits:
+          memory: 300M

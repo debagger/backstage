@@ -9,4 +9,10 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('ping')
+  async ping(): Promise<string> {
+    const pingId = await this.appService.ping();
+    return `Ping id is ${pingId}`;
+  }
 }

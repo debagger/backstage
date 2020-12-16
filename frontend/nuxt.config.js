@@ -67,5 +67,8 @@ export default {
   },
   server: {
     host: '0.0.0.0'
-  }
+  },
+  axios: {
+    baseURL: 'http://localhost', // Used as fallback if no runtime config is provided
+  },
 }

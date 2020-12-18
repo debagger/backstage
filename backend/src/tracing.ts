@@ -1,10 +1,10 @@
 import { LogLevel } from '@opentelemetry/core';
 import { NodeTracerProvider } from '@opentelemetry/node';
 
-import { SimpleSpanProcessor } from '@opentelemetry/tracing';
-import { ZipkinExporter } from '@opentelemetry/exporter-zipkin';
+import { SimpleSpanProcessor, BatchSpanProcessor } from '@opentelemetry/tracing';
+// import { ZipkinExporter } from '@opentelemetry/exporter-zipkin';
 // For Jaeger, use the following line instead:
-// import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
+import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
 export function initTracing() {
   const provider: NodeTracerProvider = new NodeTracerProvider({
     logLevel: LogLevel.INFO,
@@ -20,11 +20,12 @@ export function initTracing() {
   provider.register();
 
   provider.addSpanProcessor(
-    new SimpleSpanProcessor(
-      new ZipkinExporter({
+    new BatchSpanProcessor(
+    //   new ZipkinExporter({
         // For Jaeger, use the following line instead:
-        // new JaegerExporter({
-        url: 'http://zipkin:9411/api/v2/spans',
+        new JaegerExporter({
+        host: 'jaeger',
+        port: 6832,
         serviceName: 'backstage',
         // If you are running your tracing backend on another host,
         // you can point to it using the `url` parameter of the

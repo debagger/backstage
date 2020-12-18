@@ -7,4 +7,7 @@ export class Ping {
 
   @Column()
   date: Date;
+
+  @Column({type:'jsonb', nullable:true})
+  headers:Object
 }

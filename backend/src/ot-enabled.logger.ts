@@ -1,26 +1,40 @@
 import { Logger } from '@nestjs/common';
 import * as opentelemetry from '@opentelemetry/api';
+import { EOVERFLOW } from 'constants';
 
 export class OpenTelemetryLogger extends Logger {
-  private tracer = opentelemetry.trace.getTracer('nuxt-error-tracer');
-  error(message: string, trace: string) {
-    try {
-      const span = this.tracer.getCurrentSpan();
-      if (span) {
-        span.setAttribute('error_message', message);
-        span.setAttribute('error_trace', trace);
-      }
-    } catch (error) {}
+  constructor(private tracer: opentelemetry.Tracer) {
+    super();
+  }
+  private addEvent(type: string, attributes: opentelemetry.Attributes) {
+    const currentSpan = this.tracer.getCurrentSpan();
+    if (currentSpan) {
+      currentSpan.addEvent(type, attributes);
+    }
+  }
+
+  error(message: string, trace: string, context: string) {
+    this.addEvent('error', { message, trace, context });
     super.error(message, trace);
   }
 
   log(message: string, context?: string) {
-    try {
-      const span = this.tracer.startSpan('log_message');
-      span.setAttribute('message', message);
-      span.setAttribute('context', context);
-      span.end()
-    } catch (error) {}
-    super.log('message', context);
+    this.addEvent('log', { message, context });
+    super.log(message, context);
+  }
+
+  warn(message: string, context?: string) {
+    this.addEvent('warn', { message, context });
+    super.warn(message, context);
+  }
+
+  debug(message: string, context?: string) {
+    this.addEvent('debug', { message, context });
+    super.debug(message, context);
+  }
+  
+  verbose(message: string, context?: string) {
+    this.addEvent('verbose', { message, context });
+    super.verbose(message, context);
   }
 }

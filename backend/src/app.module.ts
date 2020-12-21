@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,7 +8,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({ debug: true });
 const env = process.env
 
-console.log("env.POSTGRES_USERNAME = ", env.POSTGRES_USERNAME)
+
 
 @Module({
   imports: [
@@ -27,4 +27,7 @@ console.log("env.POSTGRES_USERNAME = ", env.POSTGRES_USERNAME)
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  onModuleInit() {
+  }
+}

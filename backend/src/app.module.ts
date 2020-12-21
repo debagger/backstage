@@ -3,20 +3,26 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Ping } from './ping.entity';
+import * as dotenv from 'dotenv';
+
+dotenv.config({ debug: true });
+const env = process.env
+
+console.log("env.POSTGRES_USERNAME = ", env.POSTGRES_USERNAME)
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'db',
-      port: 5432,
-      username: 'postgres',
-      password: 'password',
-      database: 'backend',
+      port: Number(env.POSTGRES_PORT),
+      username: env.POSTGRES_USERNAME,
+      password: env.POSTGRES_PASSWORD,
+      database: env.POSTGRES_DATABASE,
       entities: [Ping],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Ping])
+    TypeOrmModule.forFeature([Ping]),
   ],
   controllers: [AppController],
   providers: [AppService],

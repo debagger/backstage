@@ -77,6 +77,8 @@ services:
     expose: 
       - "9200"
       - "9300"
+    ports: 
+      - 9200:9200
     environment: 
       discovery.type: single-node
       ES_JAVA_OPTS: "-Xms250m -Xmx250m"

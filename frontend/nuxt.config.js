@@ -1,27 +1,29 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  ssr: false,
   // Global page headers (https://go.nuxtjs.dev/config-head)
+  env:{
+    API_DOMAIN: process.env.API_DOMAIN,
+    API_CLIENT_ID: process.env.API_CLIENT_ID,
+    API_AUDIENCE: process.env.API_AUDIENCE
+  },
   head: {
     titleTemplate: '%s - frontend',
     title: 'frontend',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: '' },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [
-  ],
+  css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [
-  ],
+  plugins: ['~/plugins/auth.client.ts', "~/plugins/axios.ts"],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -41,13 +43,16 @@ export default {
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost', // Used as fallback if no runtime config is provided
+    credentials: true,
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
@@ -56,19 +61,15 @@ export default {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
-    }
+          success: colors.green.accent3,
+        },
+      },
+    },
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {
-  },
+  build: {},
   server: {
-    host: '0.0.0.0'
-  },
-  axios: {
-    baseURL: 'http://localhost', // Used as fallback if no runtime config is provided
-  },
+    host: '0.0.0.0',
+  }
 }

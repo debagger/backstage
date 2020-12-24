@@ -12,6 +12,7 @@
     "allowJs": true,
     "sourceMap": true,
     "strict": true,
+    "strictNullChecks": false,
     "noEmit": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
@@ -25,7 +26,9 @@
     },
     "types": [
       "@types/node",
-      "@nuxt/types"
+      "@nuxt/types",
+      "@nuxtjs/axios",
+      "@nuxtjs/vuetify"
     ]
   },
   "exclude": [

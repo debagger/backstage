@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IncomingHttpHeaders } from 'http';
 import { Repository } from 'typeorm';
 import { Ping } from './ping.entity';
 
@@ -14,7 +15,7 @@ export class AppService {
   getHello(): string {
     return 'Hello World!!!';
   }
-  async ping(headers:Headers): Promise<number> {
+  async ping(headers:Headers|IncomingHttpHeaders): Promise<number> {
     this.logger.log("Ping ping!!!!!!!!!!!!!!!!!!!!!")
     const newPing = new Ping();
     newPing.date = new Date();

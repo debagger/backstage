@@ -1,16 +1,22 @@
-import { MiddlewareConsumer, Module, NestModule, OnModuleInit } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  OnModuleInit,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Ping } from './ping.entity';
+import { GraphQLModule } from '@nestjs/graphql';
 import * as dotenv from 'dotenv';
 import * as jwksRsa from 'jwks-rsa';
 import * as jwt from 'express-jwt';
+import { join } from 'path';
+import { PingResolver } from './ping.resolver';
 
 dotenv.config({ debug: true });
-const env = process.env
-
-
+const env = process.env;
 
 @Module({
   imports: [
@@ -25,9 +31,12 @@ const env = process.env
       synchronize: true,
     }),
     TypeOrmModule.forFeature([Ping]),
+    GraphQLModule.forRoot({
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PingResolver],
 })
 export class AppModule implements OnModuleInit, NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -37,16 +46,18 @@ export class AppModule implements OnModuleInit, NestModule {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: 'https://dev-73xuxxwd.eu.auth0.com/.well-known/jwks.json',
+        jwksUri: `${env.AUTH0_ISSUER_URL}.well-known/jwks.json`,
       }),
 
       // Validate the audience and the issuer
-      audience: 'http://localhost', //replace with your API's audience, available at Dashboard > APIs
-      issuer: 'https://dev-73xuxxwd.eu.auth0.com/',
-      algorithms: ['RS256'], 
+      audience: env.AUTH0_AUDIENCE, //replace with your API's audience, available at Dashboard > APIs
+      issuer: env.AUTH0_ISSUER_URL,
+      algorithms: ['RS256'],
+      
     });
-    consumer.apply(checkJwt).forRoutes('*')
+    consumer.apply(checkJwt)
+    .exclude('graphql')
+    .forRoutes('*');
   }
-  onModuleInit() {
-  }
+  onModuleInit() {}
 }

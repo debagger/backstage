@@ -7,19 +7,51 @@
       {{ message }}<br />{{ count }}
     </v-col>
     <v-col>
-      <v-btn @click="getProfile">Profile</v-btn><br/>
+      <v-btn @click="getProfile">Profile</v-btn><br />
       <code>
-      {{ profile }}
+        {{ profile }}
       </code>
+    </v-col>
+    <v-col>
+      <ApolloQuery
+        :query="
+          (gql) =>
+            gql`
+              query {
+                pings(take: 100, skip: 4100) {
+                  count
+                  pings {
+                    id
+                    date
+                  }
+                }
+              }
+            `
+        "
+      >
+        <template v-slot="{ result: { loading, error, data } }">
+          <div v-if="loading">Loading...</div>
+          <div v-else-if="error">{{ error }}</div>
+          <div v-else-if="data">{{ data.pings }}</div>
+          <div v-else>No result :(</div>
+        </template></ApolloQuery
+      ></v-col
+    ></v-row
+  >
+</template>
+      </ApolloQuery>
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import gql from 'graphql-tag'
+
 export default Vue.extend({
   data: function () {
     return {
+      pings: ['loading'],
       enabled: false,
       message: '',
       count: '',
@@ -49,7 +81,6 @@ export default Vue.extend({
       } catch (error) {
         this.profile = error
       }
-      
     },
   },
 })

@@ -3,10 +3,10 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   ssr: false,
   // Global page headers (https://go.nuxtjs.dev/config-head)
-  env:{
+  env: {
     API_DOMAIN: process.env.API_DOMAIN,
     API_CLIENT_ID: process.env.API_CLIENT_ID,
-    API_AUDIENCE: process.env.API_AUDIENCE
+    API_AUDIENCE: process.env.API_AUDIENCE,
   },
   head: {
     titleTemplate: '%s - frontend',
@@ -23,8 +23,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ['~/plugins/auth.client.ts', "~/plugins/axios.ts"],
-
+  plugins: ['~/plugins/auth.client.ts', '~/plugins/axios.ts'],
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
 
@@ -40,8 +39,17 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/apollo',
   ],
 
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: 'http://localhost/api/graphql',
+        tokenName: 'apollo-token',
+      },
+    },
+  },
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     baseURL: 'http://localhost', // Used as fallback if no runtime config is provided
@@ -68,8 +76,19 @@ export default {
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {},
+  build: {
+    extend(config) {
+      //setup webpack to understand gql queries
+      const rule = config.module.rules.find((i) => i.loader === 'vue-loader')
+      rule.options.transpileOptions = {
+        transforms: {
+          dangerousTaggedTemplateString: true,
+        },
+      }
+    },
+  },
   server: {
     host: '0.0.0.0',
-  }
+  },
+  router: { middleware: ['set-auth-token'] },
 }

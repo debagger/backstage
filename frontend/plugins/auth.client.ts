@@ -58,7 +58,7 @@ const useAuth0 = ({
           this.popupOpen = false
         }
 
-        this.user = await this.auth0Client?.getUser()
+        this.user = await this.auth0Client.getUser()
         this.isAuthenticated = true
       },
       /** Handles the callback when logging in using a redirect */
@@ -66,7 +66,7 @@ const useAuth0 = ({
         this.loading = true
         try {
           await this.auth0Client?.handleRedirectCallback()
-          this.user = await this.auth0Client?.getUser()
+          this.user = await this.auth0Client.getUser()
           this.isAuthenticated = true
         } catch (e) {
           this.error = e
@@ -124,6 +124,7 @@ const useAuth0 = ({
         // Initialize our internal authentication state
         this.isAuthenticated = await this.auth0Client.isAuthenticated()
         this.user = await this.auth0Client.getUser()
+        // document.cookie = "apollo-token="+await this.getTokenSilently()
         this.loading = false
       }
     },

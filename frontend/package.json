@@ -12,9 +12,12 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.13.5",
     "@nuxt/typescript-runtime": "^2.0.0",
+    "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/axios": "^5.12.2",
     "core-js": "^3.6.5",
-    "nuxt": "^2.14.12"
+    "graphql-tag": "^2.11.0",
+    "nuxt": "^2.14.12",
+    "vue-apollo": "^3.0.5"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.12",

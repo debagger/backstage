@@ -24,7 +24,6 @@ services:
     entrypoint: npm run dev
   nginx:
     build: ./nginx
-    dockerfile: ./nginx/Dockerfile
     ports: 
       - 80:80
   db:

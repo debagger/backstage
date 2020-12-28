@@ -1,3 +1,4 @@
+import { UseGuards } from '@nestjs/common';
 import {
   Args,
   Int,
@@ -10,9 +11,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IncomingMessage } from 'http';
 import { Repository } from 'typeorm';
 import { AppService } from './app.service';
+import { AuthGuard } from './auth/auth.guard';
+import { User } from './auth/user.decorator';
 import { Ping } from './ping.entity';
 import { Pings } from './pings.model';
 
+@UseGuards(AuthGuard)
 @Resolver((of) => Ping)
 export class PingResolver {
   constructor(
@@ -23,8 +27,8 @@ export class PingResolver {
   async pings(
     @Args('skip', { type: () => Int }) skip: number,
     @Args('take', { type: () => Int }) take: number,
-  ) {
-    console.log('ping query');
+  @User() user:any) {
+    console.log(user);
     const res = new Pings();
     res.pings = await this.pingRepository.find({
       skip,
@@ -38,6 +42,5 @@ export class PingResolver {
   async ping(@Context() context:{req:IncomingMessage}) {
     const headers = context.req.headers
    return await this.service.ping(headers);
-
   }
 }

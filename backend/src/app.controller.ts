@@ -1,7 +1,10 @@
-import { Controller, Get, Req, Request } from '@nestjs/common';
+import { Controller, Get, Req, Request, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
+import { AuthGuard } from './auth/auth.guard';
+import { User } from './auth/user.decorator';
 
 @Controller()
+@UseGuards(AuthGuard)
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
@@ -22,7 +25,7 @@ export class AppController {
     return count;
   }
   @Get('userprofile')
-  async userprofile(@Req() req: Request) {
-    return (<any>req).user;
+  async userprofile(@User() userData: any) {
+    return userData;
   }
 }

@@ -72,15 +72,12 @@ export default Vue.extend({
     // Log the user in
     login() {
       this.$auth.loginWithRedirect({
-        redirect_uri: 'http://localhost/',
         ui_locales: 'ru',
       })
     },
     // Log the user out
     logout() {
-      this.$auth.logout({
-        returnTo: 'http://localhost/',
-      })
+      this.$auth.logout()
     },
   },
 })

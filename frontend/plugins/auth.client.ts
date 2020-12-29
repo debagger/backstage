@@ -149,6 +149,8 @@ export const Auth0Plugin = {
 }
 
 const opts: AuthPluginOptions = {
+  redirectUri: process.env.BASE_URL,
+  redirect_uri: process.env.BASE_URL,
   domain: process.env.API_DOMAIN,
   client_id: process.env.API_CLIENT_ID,
   audience: process.env.API_AUDIENCE,

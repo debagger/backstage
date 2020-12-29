@@ -7,6 +7,7 @@ export default {
     API_DOMAIN: process.env.API_DOMAIN,
     API_CLIENT_ID: process.env.API_CLIENT_ID,
     API_AUDIENCE: process.env.API_AUDIENCE,
+    BASE_URL: process.env.BASE_URL
   },
   head: {
     titleTemplate: '%s - frontend',
@@ -45,14 +46,14 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://localhost/api/graphql',
+        httpEndpoint: `${process.env.BASE_URL}/api/graphql`,
         tokenName: 'apollo-token',
       },
     },
   },
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: 'http://localhost', // Used as fallback if no runtime config is provided
+    baseURL: process.env.BASE_URL, // Used as fallback if no runtime config is provided
     credentials: true,
   },
 

@@ -28,7 +28,7 @@ export class PingResolver {
     @Args('skip', { type: () => Int }) skip: number,
     @Args('take', { type: () => Int }) take: number,
   @User() user:any) {
-    console.log(user);
+    await new Promise(resolve => setTimeout(resolve, 1000))
     const res = new Pings();
     res.pings = await this.pingRepository.find({
       skip,

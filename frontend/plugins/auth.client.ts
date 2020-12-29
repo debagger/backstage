@@ -152,6 +152,7 @@ const opts: AuthPluginOptions = {
   domain: process.env.API_DOMAIN,
   client_id: process.env.API_CLIENT_ID,
   audience: process.env.API_AUDIENCE,
+  scope: 'openid profile email',
   onRedirectCallback: (appState, router) => {
     router?.push(
       appState?.targetUrl ? appState.targetUrl : window.location.pathname

@@ -77,7 +77,9 @@ export default Vue.extend({
     },
     // Log the user out
     logout() {
-      this.$auth.logout()
+      this.$auth.logout({
+        returnTo: process.env.BASE_URL,
+      })
     },
   },
 })
